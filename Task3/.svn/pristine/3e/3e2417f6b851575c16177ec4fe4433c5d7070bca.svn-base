@@ -1,0 +1,61 @@
+package ua.nure.zharkov.Task3;
+
+import java.io.*;
+
+public class Part1 {
+
+	private static final String FILE_NAME = "part1.txt";
+	private static final String CODING = "Cp1251";
+
+	public void swapCases() throws IOException {
+		InputStream inputStream = new FileInputStream(FILE_NAME);
+		Reader reader = new InputStreamReader(inputStream, CODING);
+		BufferedReader br = new BufferedReader(reader);
+		String line = new String();
+		StringBuilder text = new StringBuilder();
+		while ((line = br.readLine()) != null) {
+			String[] words = line.split(" ");
+			text.append(printLetter(words));
+		}
+		String temp = text.toString();
+		System.out.print(temp.substring(0, temp.length() - 2));
+		System.out.print('\n');
+		reader.close();
+	}
+
+	public char uCase(char letter) {
+		return Character.toUpperCase(letter);
+	}
+
+	public char lCase(char letter) {
+		return Character.toLowerCase(letter);
+	}
+
+	private String printLetter(String[] letter) {
+		StringBuilder text = new StringBuilder();
+		for (int j = 0; j < letter.length; ++j) {
+			if (letter[j].length() >= 3) {
+				for (int i = 0; i < letter[j].length(); ++i) {
+					if (lCase(letter[j].charAt(i)) != letter[j].charAt(i)) {
+						text.append(Character.toLowerCase(letter[j].charAt(i)));
+					} else {
+						text.append(Character.toUpperCase(letter[j].charAt(i)));
+					}
+				}
+			} else {
+				text.append(letter[j]);
+			}
+			if(j < letter.length - 1) {
+				text.append(" ");
+			}
+		}
+		text.append("\r\n");
+		return text.toString();
+	}
+
+	public static void main(String[] args) throws IOException {
+		Part1 example = new Part1();
+		example.swapCases();
+	}
+
+}

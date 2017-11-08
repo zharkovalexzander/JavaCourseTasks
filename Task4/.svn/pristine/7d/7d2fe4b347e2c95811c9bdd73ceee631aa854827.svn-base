@@ -1,0 +1,114 @@
+package ua.nure.zharkov.Task4;
+
+import java.io.*;
+import java.util.*;
+
+public class Part1 {
+
+	private static final String FILE_NAME = "part1.txt";
+
+	private int rows;
+	private int cols;
+	private List<ArrayList<Integer>> matrix;
+
+	public Part1() {
+		matrix = new ArrayList<ArrayList<Integer>>();
+	}
+
+	public void readFile() {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				String[] nums = line.split(" ");
+				ArrayList<Integer> temp = new ArrayList<Integer>();
+				for (String str : nums) {
+					temp.add(Integer.parseInt(str));
+				}
+				matrix.add(temp);
+			}
+			rows = matrix.size();
+			cols = matrix.get(0).size();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public int findMaxNonThreadable() throws InterruptedException {
+		int value = Integer.MIN_VALUE;
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < cols; ++j) {
+				int elem = matrix.get(i).get(j);
+				Thread.sleep(1);
+				if (value < elem) {
+					value = elem;
+				}
+			}
+		}
+		return value;
+	}
+
+	public int findMaxThreadable() throws InterruptedException {
+		List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
+		List<Thread> threads = new ArrayList<Thread>();
+
+		class RowThread extends Thread {
+			private int index;
+
+			public RowThread(int i) {
+				index = i;
+			}
+
+			@Override
+			public void run() {
+				try {
+					int value = matrix.get(index).get(0);
+					for (int i = 1; i < cols; ++i) {
+						int elem = matrix.get(index).get(i);
+						Thread.sleep(1);
+						if (value < elem) {
+							value = elem;
+						}
+					}
+					values.add(value);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		for (int i = 0; i < rows; ++i) {
+			Thread thread = new RowThread(i);
+			thread.start();
+			threads.add(thread);
+		}
+
+		for (Thread thread : threads) {
+			thread.join();
+		}
+
+		Integer toFind = Integer.MIN_VALUE;
+		for (Integer element : values) {
+			Thread.sleep(1);
+			if (toFind < element) {
+				toFind = element;
+			}
+		}
+		return toFind;
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		Part1 example = new Part1();
+		example.readFile();
+		long startTime1 = System.currentTimeMillis();
+		Integer time_second = example.findMaxThreadable();
+		long stopTime1 = System.currentTimeMillis();
+		System.out.println(time_second);
+		System.out.println(stopTime1 - startTime1);
+		long startTime = System.currentTimeMillis();
+		Integer time_first = example.findMaxNonThreadable();
+		long stopTime = System.currentTimeMillis();
+		System.out.println(time_first);
+		System.out.println(stopTime - startTime);
+	}
+
+}

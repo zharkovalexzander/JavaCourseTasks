@@ -1,0 +1,26 @@
+package ua.nure.zharkov.Task4;
+
+import java.io.*;
+
+public class Part2 {
+
+	private static final InputStream STD_IN = System.in;
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					Spam.main(null);
+				} catch (InterruptedException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		thread.start();
+		Thread.sleep(2000);
+		System.setIn(new SuspendedMessagesStream(System.lineSeparator()));
+		thread.join();
+		System.setIn(STD_IN);
+	}
+
+}

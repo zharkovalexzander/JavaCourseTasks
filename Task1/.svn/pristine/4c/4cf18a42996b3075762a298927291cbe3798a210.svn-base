@@ -1,0 +1,38 @@
+package ua.nure.zharkov.Task1;
+
+public class Part5 {
+
+	public static int Power(int num, int pow) {
+		if (pow == 0) {
+			return 1;
+		}
+		if ((pow & 1) == 1) {
+			return Power(num, pow - 1) * num;
+		} else {
+			int op = Power(num, pow / 2);
+			return op * op;
+		}
+	}
+
+	public static int LuckyNums(int n) {
+		int answer = 0;
+		int fop = Power(10, n - 1);
+		int halfPow = Power(10, (n / 2));
+		while (fop < Power(10, n)) {
+			if (Part2.SumOfDigits(fop % halfPow) == Part2.SumOfDigits(fop / halfPow)) {
+				++answer;
+			}
+			++fop;
+		}
+		return answer;
+	}
+
+	public static void main(int... args) {
+		if (args.length == 0) {
+			System.out.print("Function got no parameters");
+		} else {
+			System.out.print("Executing program Part5: \n" + LuckyNums(args[0]) + "\n");
+		}
+	}
+
+}

@@ -1,0 +1,18 @@
+package ua.nure.zharkov.Task1;
+
+public class Demo {
+
+	public static void main(String[] args) {
+		Part1.main(new String[]{"42", "36"});
+		Part2.main(new String[]{"44"});
+		Part3.main(new String[]{"4"});
+		Part4.main(new String[]{"7"});
+		Part5.main(new String[]{"4"});
+		Part6.main(new String[]{"7"});
+		Part7.main(new String[]{"18"});
+		Part8.main(new String[]{"2", "4"});
+		Part9.main(new String[]{});
+		Part10.main(new String[]{"5"});
+	}
+
+}

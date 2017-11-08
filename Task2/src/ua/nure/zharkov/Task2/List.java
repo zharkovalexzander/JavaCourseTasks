@@ -1,0 +1,15 @@
+package ua.nure.zharkov.Task2;
+
+public interface List extends java.lang.Iterable<Object> {
+    int size();
+    void add(Object el);   
+    Object get(int index);   
+    void addAll(List list);  
+    void clear();  
+    TaskIterator iterator();  
+    Object[] toArray();   
+    boolean contains(Object el);   
+    int indexOf(Object el);   
+    Object remove(int index);   
+    boolean remove(Object el);
+}

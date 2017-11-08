@@ -1,0 +1,90 @@
+package ua.nure.zharkov.Task4;
+
+import java.io.*;
+import java.util.*;
+
+public class Part3 {
+
+	private static final int PAUSE = 1;
+	private static final String LS = System.lineSeparator();
+	private static final String FILE_NAME = "part3.txt";
+	private static final int N = 20;
+	private static final int K = 10;
+	private List<Thread> threads;
+	private List<Long> indexes;
+	private RandomAccessFile raf;
+
+	public Part3() throws IOException {
+		threads = new ArrayList<Thread>();
+		indexes = Collections.synchronizedList(new ArrayList<Long>());
+		long counter = 0;
+		indexes.add(counter);
+		for (int i = 1; i < K; ++i) {
+			counter += LS.length() + N;
+			indexes.add(counter);
+		}
+		prepareFile();
+	}
+
+	public synchronized void writemychar(int character, int at) throws IOException, InterruptedException {
+		long pos = indexes.get(at);
+		raf.seek(pos);
+		Thread.sleep(PAUSE);
+		raf.write(character + 48);
+		Long my = indexes.get(at) + 1;
+		indexes.set(at, my);
+	}
+
+	public synchronized void finishWriting(int at) throws InterruptedException, IOException {
+		long pos = indexes.get(at);
+		raf.seek(pos);
+		Thread.sleep(PAUSE);
+		for (int j = 0; j < LS.length(); ++j) {
+			raf.write((int) LS.charAt(j));
+		}
+	}
+
+	class ThreadWriter extends Thread {
+		private int index;
+
+		public ThreadWriter(int i) {
+			index = i;
+		}
+
+		@Override
+		public void run() {
+			try {
+				for (int i = 0; i < N; ++i) {
+					writemychar(index, index);
+				}
+				finishWriting(index);
+			} catch (InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void start() throws InterruptedException, IOException {
+		for (int i = 0; i < K; ++i) {
+			Thread thread = new ThreadWriter(i);
+			thread.start();
+			threads.add(thread);
+		}
+
+		for (Thread thread : threads) {
+			thread.join();
+		}
+
+	}
+
+	private void prepareFile() throws IOException {
+		new File(FILE_NAME).delete();
+		raf = new RandomAccessFile(new File(FILE_NAME), "rw");
+	}
+
+	public static void main(String[] args) throws IOException, InterruptedException {
+		Part3 example = new Part3();
+		example.start();
+	}
+
+}

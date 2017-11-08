@@ -1,0 +1,31 @@
+package ua.nure.zharkov.Task1;
+
+public class Part9 {
+
+	private static int _getI(int index, int digit) {
+		return Math.round((index % Part5.Power(2, digit)) / (float) Part5.Power(2, digit));
+	}
+
+	public static int[][][][][] FiveD() {
+		int[][][][][] result = new int[2][2][2][2][2];
+		for (int i = 0; i < 32; ++i) {
+			result[_getI(i, 5)][_getI(i, 4)][_getI(i, 3)][_getI(i, 2)][_getI(i, 1)] = i + 1;
+		}
+		return result;
+	}
+
+	public static String PrintFiveD(int[][][][][] fd) {
+		String out = new String();
+		for (int i = 0; i < 32; ++i) {
+			out += fd[_getI(i, 5)][_getI(i, 4)][_getI(i, 3)][_getI(i, 2)][_getI(i, 1)] + " ";
+		}
+		out += "\n";
+		return out;
+	}
+
+	public static void main(String[] args) {
+		int[][][][][] outData = FiveD();
+		System.out.print(PrintFiveD(outData));
+	}
+
+}

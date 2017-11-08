@@ -1,0 +1,30 @@
+package ua.nure.zharkov.Task3;
+
+import java.io.*;
+
+public class Part4 {
+
+	private static final String FILE_NAME = "part4.txt";
+	private static final String CODING = "Cp1251";
+
+	private Parser parser;
+
+	public Part4() throws IOException {
+		parser = new Parser(FILE_NAME, CODING);
+	}
+
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (String x : parser) {
+			builder.append(x);
+			builder.append('\n');
+		}
+		return builder.toString();
+	}
+
+	public static void main(String[] args) throws IOException {
+		Part4 example = new Part4();
+		System.out.print(example);
+	}
+	
+}

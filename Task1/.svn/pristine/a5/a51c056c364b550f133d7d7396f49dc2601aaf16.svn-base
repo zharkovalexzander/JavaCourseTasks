@@ -1,0 +1,22 @@
+package ua.nure.zharkov.Task1;
+
+public class Part2 {
+
+	public static int SumOfDigits(int n) {
+		int result = 0;
+		int tmp = n;
+		while (tmp != 0) {
+			result += tmp % 10;
+			tmp /= 10;
+		}
+		return result;
+	}
+
+	public static void main(int... args) {
+		if (args.length == 0) {
+			System.out.print("Function got no parameters");
+		} else {
+			System.out.print("Executing program Part2: \n" + SumOfDigits(args[0]) + "\n");
+		}
+	}
+}

@@ -1,0 +1,37 @@
+package ua.nure.zharkov.Task1;
+
+public class Part8 {
+
+	public static char[][] BWMatrix(int m, int n) {
+		char[][] result = new char[m][n];
+		boolean flag = true;
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < n; ++j) {
+				result[i][j] = flag ? '×' : 'Á';
+				flag = !flag;
+			}
+		}
+		return result;
+	}
+
+	public static String StrBW(char[][] matrix, int m, int n) {
+		String out = new String();
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < n; ++j) {
+				out += matrix[i][j] + " ";
+			}
+			out += "\n";
+		}
+		return out;
+	}
+
+	public static void main(int... args) {
+		if (args.length == 0) {
+			System.out.print("Function got no parameters");
+		} else {
+			char[][] outData = BWMatrix(args[0], args[1]);
+			System.out.print("Executing program Part8: \n" + StrBW(outData, args[0], args[1]));
+		}
+	}
+
+}

@@ -1,0 +1,94 @@
+package ua.nure.zharkov.Task4;
+
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Spam {
+
+	private String[] messages;
+	private int[] times;
+	private List<Thread> threads;
+
+	class MessagesThread extends Thread {
+
+		private int indexofmessage;
+		private int indexoftimer;
+
+		public MessagesThread(int indexOfMessage, int indexOfTimer) {
+			this.indexofmessage = indexOfMessage;
+			this.indexoftimer = indexOfTimer;
+		}
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(times[indexoftimer]);
+				System.out.println(messages[indexofmessage]);
+			} catch (InterruptedException e) {
+				Logger loger = Logger.getLogger(Spam.class.getName());
+				loger.log(Level.ALL, "Exception occur", e);
+			}
+		}
+	}
+
+	class TimeThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(2000);
+				InputStreamReader isr = new InputStreamReader(System.in);
+				BufferedReader br = new BufferedReader(isr);
+				String line = "Not empty";
+				while (line != null) {
+					line = br.readLine();
+					if (line == null || line.isEmpty()) {
+						br.close();
+						isr.close();
+						interruptAll();
+					}
+				}
+			} catch (IOException | InterruptedException e) {
+				Logger loger = Logger.getLogger(Spam.class.getName());
+				loger.log(Level.ALL, "Exception occur", e);
+			}
+		}
+	}
+
+	public Spam(String[] messages, int[] times) {
+		this.messages = Arrays.copyOf(messages, messages.length);
+		this.times = Arrays.copyOf(times, times.length);
+		threads = new ArrayList<Thread>();
+	}
+
+	public void launch() throws InterruptedException {
+		for (int i = 0; i < messages.length; ++i) {
+			Thread thread = new MessagesThread(i, i);
+			thread.start();
+			threads.add(thread);
+		}
+
+		Thread threader = new TimeThread();
+		threader.start();
+		threads.add(threader);
+
+		for (Thread thread : threads) {
+			thread.join();
+		}
+	}
+
+	public void interruptAll() {
+		for (Thread thread : threads) {
+			if (thread.isAlive()) {
+				thread.interrupt();
+			}
+		}
+	}
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+		Spam example = new Spam(new String[] { "@@@", "bbbbbbb" }, new int[] { 333, 222 });
+		example.launch();
+	}
+
+}

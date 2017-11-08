@@ -1,0 +1,21 @@
+package ua.nure.zharkov.Task1;
+
+public class Part1 {
+
+	public static int NOD(int farg, int sarg) {
+		if (sarg == 0) {
+			return farg;
+		} else {
+			return NOD(sarg, farg % sarg);
+		}
+	}
+
+	public static void main(String[] args) {
+		if (args.length == 0) {
+			System.out.print("Function got no parameters");
+		} else {
+			System.out.print("=== Part1\n" + NOD(Integer.parseInt(args[0]), Integer.parseInt(args[1])) + "\n");
+		}
+	}
+
+}

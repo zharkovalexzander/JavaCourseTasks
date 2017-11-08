@@ -1,0 +1,11 @@
+package ua.nure.zharkov.Task2;
+
+public class Demo {
+
+	public static void main(String[] args) {
+		Circle.main(args);
+		Matrix.main(args);
+		ListImpl.main(args);
+	}
+
+}

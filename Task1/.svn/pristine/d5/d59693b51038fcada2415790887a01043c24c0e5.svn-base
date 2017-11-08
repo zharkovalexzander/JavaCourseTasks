@@ -1,0 +1,40 @@
+package ua.nure.zharkov.Task1;
+
+public class Part10 {
+
+	public static int[][] BinCoeffPyramid(int n) {
+		int[][] triaArr = new int[n][];
+		for (int i = 0; i < n; ++i) {
+			triaArr[i] = new int[i + 1];
+			for (int j = 0; j <= i; ++j) {
+				if (j == 0 || j == i) {
+					triaArr[i][j] = 1;
+					continue;
+				}
+				triaArr[i][j] = triaArr[i - 1][j] + triaArr[i - 1][j - 1];
+			}
+		}
+		return triaArr;
+	}
+
+	public static String CoefBinToStr(int[][] matrix) {
+		String out = new String();
+		for (int i = 0; i < matrix.length; ++i) {
+			for (int j = 0; j < matrix[i].length; ++j) {
+				out += matrix[i][j] + " ";
+			}
+			out += "\n";
+		}
+		return out;
+	}
+
+	public static void main(int... args) {
+		if (args.length == 0) {
+			System.out.print("Function got no parameters");
+		} else {
+			int[][] outData = BinCoeffPyramid(args[0]);
+			System.out.print("Executing program Part10: \n" + CoefBinToStr(outData) + "\n");
+		}
+	}
+
+}

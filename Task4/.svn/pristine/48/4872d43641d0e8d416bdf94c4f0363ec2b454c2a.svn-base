@@ -1,0 +1,102 @@
+package ua.nure.zharkov.Task4;
+
+import java.io.*;
+import java.util.*;
+
+public class PlanBforPart1 {
+
+	private static final String FILE_NAME = "part1.txt";
+
+	public Integer findMaxNonThreadable() throws InterruptedException, IOException {
+		Integer toFind = Integer.MIN_VALUE;
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				String[] nums = line.split("\t");
+				for(String str : nums) {
+					int value = Integer.parseInt(str);
+					Thread.sleep(1);
+					toFind = value > toFind ? value : toFind;
+				}
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		return toFind;
+	}
+
+	public Integer findMaxThreadable() throws InterruptedException {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
+			List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
+			List<Thread> threads = new ArrayList<Thread>();
+			
+			class RowThread extends Thread {
+				private String stream;
+
+				public RowThread(String str) {
+					stream = str;
+				}
+
+				@Override
+				public void run() {
+					String[] nums = stream.split("\t");
+					try {
+						values.add(findmax(nums));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				private Integer findmax(String[] nums) throws InterruptedException {
+					Integer toFind = Integer.parseInt(nums[0]);
+					for (int i = 1; i < nums.length; ++i) {
+						Integer value = Integer.parseInt(nums[i]);
+						Thread.sleep(1);
+						if(toFind < value) {
+							toFind = value;
+						}
+					}
+					return toFind;
+				}
+			}
+			
+			String line;
+			while((line = bufferedReader.readLine()) != null) {
+				Thread thread = new RowThread(line);
+				thread.start();
+				threads.add(thread);
+			}
+			
+			for(Thread thread : threads) {
+				thread.join();
+			}
+			
+			Integer toFind = Integer.MIN_VALUE;
+			for (Integer value : values) {
+				Thread.sleep(1);
+				if(toFind < value) {
+					toFind = value;
+				}
+			}
+			return toFind;
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return Integer.MIN_VALUE;
+	}
+
+	public static void main(String[] args) throws IOException, InterruptedException {
+		PlanBforPart1 example = new PlanBforPart1();
+		long startTime1 = System.currentTimeMillis();
+		Integer time_second = example.findMaxThreadable();
+		long stopTime1 = System.currentTimeMillis();
+		System.out.println(time_second);
+		System.out.println(stopTime1 - startTime1);
+		long startTime = System.currentTimeMillis();
+		Integer time_first = example.findMaxNonThreadable();
+		long stopTime = System.currentTimeMillis();
+		System.out.println(time_first);
+		System.out.println(stopTime - startTime);
+	}
+
+}

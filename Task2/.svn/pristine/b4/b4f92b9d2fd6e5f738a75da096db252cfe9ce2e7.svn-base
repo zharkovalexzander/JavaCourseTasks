@@ -1,0 +1,95 @@
+package ua.nure.zharkov.Task2;
+
+import java.lang.StringBuilder;
+
+public class Circle {
+	
+	protected double x;
+	protected double y;
+	protected double r;
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
+	}
+	
+	public double getR() {
+		return r;
+	}
+	
+	public Circle(double x, double y, double r) {
+		this.x = x;
+		this.y = y;
+		this.r = r;
+	}
+	
+	public void move(double dx, double dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+	
+	public boolean isInside(double x, double y) { 
+		if(pathLength(x, y) < powTwo(r)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isInside(Circle c) {
+		if(pathLength(c.getX(), c.getY()) + powTwo(c.getR()) < powTwo(r)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private double powTwo(double ex) {
+		return ex * ex;
+	}
+	
+	public double pathLength(double dx, double dy) {
+		double path_x = powTwo(x - dx);
+		double path_y = powTwo(y - dy);
+		return path_x + path_y;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder data = new StringBuilder("Circle");
+		data.append(" (");
+		data.append(x);
+		data.append(", ");
+		data.append(y);
+		data.append(", ");
+		data.append(r);
+		data.append(")");
+		return data.toString();
+	}
+	
+	public void print() {
+		System.out.println(toString());
+	}
+
+	public static void main(String[] args) {	
+		System.out.println("~~~ c");
+	    Circle c = new Circle(0, 0, 1);
+	    c.print();
+	    System.out.println("~~~ c.move(1, 1)");
+	    c.move(1, 1);
+	    c.print();
+	    System.out.println("~~~ c.isInside(1, 1)");
+	    System.out.println(c.isInside(1, 1));
+	    System.out.println("~~~ c.isInside(10, 1)");
+	    System.out.println(c.isInside(10, 1));
+	    System.out.println("~~~ c2");
+	    Circle c2 = new Circle(1, 1, 2);
+	    c2.print();
+	    System.out.println("~~~ c.isInside(c2)");
+	    System.out.println(c.isInside(c2));
+	    System.out.println("~~~ c2.isInside(c)");
+	    System.out.println(c2.isInside(c));
+	}
+
+}

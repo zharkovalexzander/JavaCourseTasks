@@ -1,0 +1,18 @@
+package ua.nure.zharkov.Task1;
+
+public class Demo {
+
+	public static void main(String[] args) {
+		Part1.main(35, 45);
+		Part2.main(44);
+		Part3.main(4);
+		Part4.main(8);
+		Part5.main(4);
+		Part6.main(7);
+		Part7.main(18);
+		Part8.main(8, 7);
+		Part9.main();
+		Part10.main(15);
+	}
+
+}
